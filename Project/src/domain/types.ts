@@ -1,4 +1,3 @@
-
 export type Pos = {
   x: number
   y: number
@@ -6,7 +5,7 @@ export type Pos = {
 
 export type Cell =
   | { kind: "Mine" }
-  | { kind: "Empty", adjacentMines: number }
+  | { kind: "Empty"; adjacentMines: number }
 
 export type CellView =
   | { kind: "Hidden" }

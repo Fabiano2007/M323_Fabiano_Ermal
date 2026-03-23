@@ -1,7 +1,7 @@
+import { createBoard } from "./domain/grid.js"
+import { mulberry32 } from "./domain/rng.js"
 
-import { neighbors } from "./domain/grid.js"
+const board = createBoard(5, 5, 5, mulberry32(123))
 
-const result = neighbors({ x: 1, y: 1 })
-
-console.log("Neighbors of (1,1):")
-console.log(result)
+console.log("Generated board:")
+console.log(board)

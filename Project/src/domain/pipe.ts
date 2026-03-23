@@ -1,4 +1,3 @@
-
 export const pipe =
   <A>(value: A) =>
   <B>(...fns: Array<(x: any) => any>): B =>
