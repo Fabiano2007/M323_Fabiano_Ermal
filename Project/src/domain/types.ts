@@ -1,7 +1,4 @@
-export type Pos = {
-  x: number
-  y: number
-}
+export type Pos = { x: number; y: number }
 
 export type Cell =
   | { kind: "Mine" }
@@ -17,4 +14,11 @@ export type Board = {
   height: number
   cells: Cell[]
   view: CellView[]
+}
+
+export type GameStatus = "playing" | "won" | "lost"
+
+export type GameState = {
+  board: Board
+  status: GameStatus
 }

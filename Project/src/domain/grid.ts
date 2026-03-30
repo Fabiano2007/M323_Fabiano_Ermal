@@ -1,108 +1,41 @@
 import { Board, Cell, CellView, Pos } from "./types.js"
 
-export const indexOf = (width: number, pos: Pos): number =>
-  pos.y * width + pos.x
+export const indexOf = (w: number, p: Pos) => p.y * w + p.x
 
-export const inBounds = (
-  width: number,
-  height: number,
-  pos: Pos
-): boolean =>
-  pos.x >= 0 &&
-  pos.x < width &&
-  pos.y >= 0 &&
-  pos.y < height
+export const inBounds = (w: number, h: number, p: Pos) =>
+  p.x >= 0 && p.x < w && p.y >= 0 && p.y < h
 
-export const neighbors = (pos: Pos): Pos[] => [
-  { x: pos.x - 1, y: pos.y - 1 },
-  { x: pos.x, y: pos.y - 1 },
-  { x: pos.x + 1, y: pos.y - 1 },
-  { x: pos.x - 1, y: pos.y },
-  { x: pos.x + 1, y: pos.y },
-  { x: pos.x - 1, y: pos.y + 1 },
-  { x: pos.x, y: pos.y + 1 },
-  { x: pos.x + 1, y: pos.y + 1 }
+export const neighbors = (p: Pos): Pos[] => [
+  { x: p.x-1, y: p.y-1 }, { x: p.x, y: p.y-1 }, { x: p.x+1, y: p.y-1 },
+  { x: p.x-1, y: p.y },                     { x: p.x+1, y: p.y },
+  { x: p.x-1, y: p.y+1 }, { x: p.x, y: p.y+1 }, { x: p.x+1, y: p.y+1 }
 ]
 
-export const positions = (
-  width: number,
-  height: number
-): Pos[] =>
-  Array.from({ length: width * height }, (_, i) => ({
-    x: i % width,
-    y: Math.floor(i / width)
-  }))
+export const positions = (w:number,h:number):Pos[] =>
+  Array.from({length:w*h},(_,i)=>({x:i%w,y:Math.floor(i/w)}))
 
-export const countAdjacentMines = (
-  width: number,
-  height: number,
-  mineIndexes: ReadonlySet<number>,
-  pos: Pos
-): number =>
-  neighbors(pos)
-    .filter((p) => inBounds(width, height, p))
-    .map((p) => indexOf(width, p))
-    .filter((i) => mineIndexes.has(i))
-    .length
+export const countAdjacentMines = (w:number,h:number,mines:Set<number>,p:Pos)=>
+  neighbors(p)
+    .filter(n=>inBounds(w,h,n))
+    .map(n=>indexOf(w,n))
+    .filter(i=>mines.has(i)).length
 
-const makeView = (width: number, height: number): CellView[] =>
-  Array.from({ length: width * height }, () => ({ kind: "Hidden" }))
+const makeView=(w:number,h:number):CellView[] =>
+  Array.from({length:w*h},()=>({kind:"Hidden"}))
 
-const makeCells = (
-  width: number,
-  height: number,
-  mineIndexes: ReadonlySet<number>
-): Cell[] =>
-  positions(width, height).map((pos) => {
-    const idx = indexOf(width, pos)
-
-    if (mineIndexes.has(idx)) {
-      return { kind: "Mine" }
-    }
-
-    return {
-      kind: "Empty",
-      adjacentMines: countAdjacentMines(width, height, mineIndexes, pos)
-    }
+const makeCells=(w:number,h:number,mines:Set<number>):Cell[] =>
+  positions(w,h).map(p=>{
+    const i=indexOf(w,p)
+    if(mines.has(i)) return {kind:"Mine"}
+    return {kind:"Empty",adjacentMines:countAdjacentMines(w,h,mines,p)}
   })
 
-export const createBoard = (
-  width: number,
-  height: number,
-  mineCount: number,
-  nextRandom: () => number
-): Board => {
-  const total = width * height
-  const safeMineCount = Math.max(0, Math.min(mineCount, total - 1))
-
-  const shuffledIndexes = Array.from({ length: total }, (_, i) => i)
-    .map((i) => ({ i, key: nextRandom() }))
-    .sort((a, b) => a.key - b.key)
-    .slice(0, safeMineCount)
-    .map((item) => item.i)
-
-  const mineIndexes = new Set<number>(shuffledIndexes)
-
-  return {
-    width,
-    height,
-    cells: makeCells(width, height, mineIndexes),
-    view: makeView(width, height)
-  }
-}
-
-export const getCell = (board: Board, pos: Pos): Cell | undefined => {
-  if (!inBounds(board.width, board.height, pos)) {
-    return undefined
-  }
-
-  return board.cells[indexOf(board.width, pos)]
-}
-
-export const getView = (board: Board, pos: Pos): CellView | undefined => {
-  if (!inBounds(board.width, board.height, pos)) {
-    return undefined
-  }
-
-  return board.view[indexOf(board.width, pos)]
+export const createBoard=(w:number,h:number,mineCount:number,rand:()=>number):Board=>{
+  const total=w*h
+  const arr=Array.from({length:total},(_,i)=>({i,k:rand()}))
+    .sort((a,b)=>a.k-b.k)
+    .slice(0,mineCount)
+    .map(x=>x.i)
+  const mines=new Set(arr)
+  return { width:w,height:h,cells:makeCells(w,h,mines),view:makeView(w,h) }
 }

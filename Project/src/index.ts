@@ -1,7 +1,14 @@
 import { createBoard } from "./domain/grid.js"
 import { mulberry32 } from "./domain/rng.js"
+import { reveal } from "./domain/game.js"
 
-const board = createBoard(5, 5, 5, mulberry32(123))
+let state = {
+  board: createBoard(5,5,5,mulberry32(123)),
+  status: "playing"
+}
 
-console.log("Generated board:")
-console.log(board)
+console.log("Initial:", state.status)
+
+state = reveal(state, {x:2,y:2})
+
+console.log("After reveal:", state.status)

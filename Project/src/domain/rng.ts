@@ -1,10 +1,5 @@
-/**
- * Deterministic random generator.
- * Same seed -> same board.
- */
 export const mulberry32 = (seed: number) => {
   let t = seed >>> 0
-
   return () => {
     t += 0x6D2B79F5
     let x = Math.imul(t ^ (t >>> 15), 1 | t)
