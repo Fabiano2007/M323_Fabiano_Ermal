@@ -1,4 +1,4 @@
-import { GameState, Pos } from "./types.js"
+import { CellView, GameState, Pos } from "./types.js"
 import { indexOf, inBounds } from "./grid.js"
 
 export const reveal = (state: GameState, pos: Pos): GameState => {
@@ -14,8 +14,8 @@ export const reveal = (state: GameState, pos: Pos): GameState => {
     return { ...state, status: "lost" }
   }
 
-  const newView = board.view.map((v, i) =>
-    i === idx ? { kind: "Revealed" } : v
+  const newView: CellView[] = board.view.map((v, i) =>
+    i === idx ? { kind: "Revealed" as const } : v
   )
 
   return {
