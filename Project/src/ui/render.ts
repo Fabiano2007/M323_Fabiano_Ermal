@@ -10,7 +10,8 @@ const cellChar = (state: GameState, pos: Pos): string => {
   if (view.kind === "Hidden") return "■"
   if (view.kind === "Flagged") return "⚑"
 
-  if (cell.kind === "Mine") return "✹"
+  if (state.status === "lost" && cell.kind === "Mine") return "✹"
+  if (cell.kind === "Mine") return "■"
   return cell.adjacentMines === 0 ? " " : String(cell.adjacentMines)
 }
 
@@ -29,7 +30,9 @@ export const render = (state: GameState): string => {
   const lines = [
     `Minesweeper | ${state.board.width}x${state.board.height} | status=${state.status}`,
     header(state.board.width),
-    ...Array.from({ length: state.board.height }, (_, y) => rowLine(state, y))
+    ...Array.from({ length: state.board.height }, (_, y) => rowLine(state, y)),
+    "",
+    "Commands: reveal x y | flag x y | quit"
   ]
 
   return lines.join("\n")
