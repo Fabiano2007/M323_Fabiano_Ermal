@@ -1,5 +1,5 @@
 import { createBoard } from "./domain/grid.js"
-import { reveal } from "./domain/game.js"
+import { reveal, toggleFlag } from "./domain/game.js"
 import { mulberry32 } from "./domain/rng.js"
 import { GameState } from "./domain/types.js"
 
@@ -10,6 +10,8 @@ let state: GameState = {
 
 console.log("Initial:", state.status)
 
-state = reveal(state, { x: 2, y: 2 })
+state = toggleFlag(state, { x: 0, y: 0 })
+console.log("After flag:", state.status)
 
+state = reveal(state, { x: 2, y: 2 })
 console.log("After reveal:", state.status)

@@ -64,3 +64,20 @@ export const createBoard = (
     view: makeView(w, h)
   }
 }
+
+export const getCell = (board: Board, pos: Pos): Cell | undefined => {
+  if (!inBounds(board.width, board.height, pos)) return undefined
+  return board.cells[indexOf(board.width, pos)]
+}
+
+export const getView = (board: Board, pos: Pos): CellView | undefined => {
+  if (!inBounds(board.width, board.height, pos)) return undefined
+  return board.view[indexOf(board.width, pos)]
+}
+
+export const setView = (board: Board, pos: Pos, view: CellView): Board => {
+  if (!inBounds(board.width, board.height, pos)) return board
+  const idx = indexOf(board.width, pos)
+  const nextView = board.view.map((v, i) => (i === idx ? view : v))
+  return { ...board, view: nextView }
+}
