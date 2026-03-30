@@ -31,13 +31,8 @@ export const parseCommand = (input: string): ParseResult => {
     return { ok: false, error: "Usage: reveal x y | flag x y" }
   }
 
-  if (cmd === "reveal") {
-    return { ok: true, command: { kind: "Reveal", pos: { x, y } } }
-  }
+  if (cmd === "reveal") return { ok: true, command: { kind: "Reveal", pos: { x, y } } }
+  if (cmd === "flag") return { ok: true, command: { kind: "Flag", pos: { x, y } } }
 
-  if (cmd === "flag") {
-    return { ok: true, command: { kind: "Flag", pos: { x, y } } }
-  }
-
-  return { ok: false, error: "Unknown command. Use: reveal x y | flag x y | quit" }
+  return { ok: false, error: "Unknown command. Use: reveal x y | flag x y | help | quit" }
 }

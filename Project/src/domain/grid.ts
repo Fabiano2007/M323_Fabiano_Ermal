@@ -22,7 +22,7 @@ export const positions = (w: number, h: number): Pos[] =>
 export const countAdjacentMines = (
   w: number,
   h: number,
-  mines: Set<number>,
+  mines: ReadonlySet<number>,
   p: Pos
 ): number =>
   neighbors(p)
@@ -34,7 +34,7 @@ export const countAdjacentMines = (
 const makeView = (w: number, h: number): CellView[] =>
   Array.from({ length: w * h }, () => ({ kind: "Hidden" as const }))
 
-const makeCells = (w: number, h: number, mines: Set<number>): Cell[] =>
+const makeCells = (w: number, h: number, mines: ReadonlySet<number>): Cell[] =>
   positions(w, h).map((p) => {
     const i = indexOf(w, p)
     if (mines.has(i)) return { kind: "Mine" as const }

@@ -45,7 +45,7 @@ export const startConsoleGame = (): void => {
     }
 
     if (command.kind === "Help") {
-      console.log("Commands: reveal x y | flag x y | quit")
+      console.log("Commands: reveal x y | flag x y | help | quit")
       rl.prompt()
       return
     }
@@ -60,13 +60,8 @@ export const startConsoleGame = (): void => {
 
     draw()
 
-    if (state.status === "won") {
-      console.log("You won!")
-    }
-
-    if (state.status === "lost") {
-      console.log("You lost!")
-    }
+    if (state.status === "won") console.log("You won!")
+    if (state.status === "lost") console.log("You lost!")
 
     rl.prompt()
   })

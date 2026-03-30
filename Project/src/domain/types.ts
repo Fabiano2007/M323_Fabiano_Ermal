@@ -1,24 +1,24 @@
-export type Pos = { x: number; y: number }
+export type Pos = Readonly<{ x: number; y: number }>
 
 export type Cell =
-  | { kind: "Mine" }
-  | { kind: "Empty"; adjacentMines: number }
+  | Readonly<{ kind: "Mine" }>
+  | Readonly<{ kind: "Empty"; adjacentMines: number }>
 
 export type CellView =
-  | { kind: "Hidden" }
-  | { kind: "Revealed" }
-  | { kind: "Flagged" }
+  | Readonly<{ kind: "Hidden" }>
+  | Readonly<{ kind: "Revealed" }>
+  | Readonly<{ kind: "Flagged" }>
 
-export type Board = {
+export type Board = Readonly<{
   width: number
   height: number
-  cells: Cell[]
-  view: CellView[]
-}
+  cells: ReadonlyArray<Cell>
+  view: ReadonlyArray<CellView>
+}>
 
 export type GameStatus = "playing" | "won" | "lost"
 
-export type GameState = {
+export type GameState = Readonly<{
   board: Board
   status: GameStatus
-}
+}>

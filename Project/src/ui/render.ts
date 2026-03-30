@@ -7,11 +7,10 @@ const cellChar = (state: GameState, pos: Pos): string => {
 
   if (!cell || !view) return "?"
 
-  if (view.kind === "Hidden") return "■"
+  if (view.kind === "Hidden") return state.status === "lost" && cell.kind === "Mine" ? "✹" : "■"
   if (view.kind === "Flagged") return "⚑"
 
-  if (state.status === "lost" && cell.kind === "Mine") return "✹"
-  if (cell.kind === "Mine") return "■"
+  if (cell.kind === "Mine") return "✹"
   return cell.adjacentMines === 0 ? " " : String(cell.adjacentMines)
 }
 
@@ -32,7 +31,7 @@ export const render = (state: GameState): string => {
     header(state.board.width),
     ...Array.from({ length: state.board.height }, (_, y) => rowLine(state, y)),
     "",
-    "Commands: reveal x y | flag x y | quit"
+    "Commands: reveal x y | flag x y | help | quit"
   ]
 
   return lines.join("\n")
