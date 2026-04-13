@@ -14,6 +14,10 @@ const revealedSafeCount = (board: Board): number =>
 const totalSafeCells = (board: Board): number =>
   board.cells.filter((cell) => cell.kind === "Empty").length
 
+/**
+ * Recursion example 1:
+ * reveals neighboring empty cells recursively.
+ */
 const floodReveal = (board: Board, start: Pos, visited: ReadonlySet<number>): Board => {
   if (!inBounds(board.width, board.height, start)) return board
 
@@ -39,6 +43,22 @@ const floodReveal = (board: Board, start: Pos, visited: ReadonlySet<number>): Bo
     boardAfterReveal
   )
 }
+
+/**
+ * Recursion example 2:
+ * counts all hidden cells recursively.
+ */
+const countHiddenCellsRecursive = (board: Board, index: number): number => {
+  if (index >= board.view.length) return 0
+
+  const current = board.view[index]
+  const add = current.kind === "Hidden" ? 1 : 0
+
+  return add + countHiddenCellsRecursive(board, index + 1)
+}
+
+export const countHiddenCells = (board: Board): number =>
+  countHiddenCellsRecursive(board, 0)
 
 export const reveal = (state: GameState, pos: Pos): GameState => {
   if (state.status !== "playing") return state

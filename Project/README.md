@@ -7,6 +7,7 @@ This project implements a console-based Minesweeper game in TypeScript and focus
 - deterministic board generation with seed-based random numbers
 - immutable game state updates
 - recursive flood reveal for empty cells
+- recursive hidden-cell counting
 - flagging
 - win and lose conditions
 - interactive console commands
@@ -45,13 +46,6 @@ help
 quit
 ```
 
-Example:
-
-```txt
-reveal 2 2
-flag 0 0
-```
-
 ## Project Structure
 
 ```txt
@@ -81,7 +75,9 @@ The domain logic is pure. Functions such as `reveal`, `toggleFlag`, `createBoard
 The board and the game state are never modified in place. Instead, new objects and arrays are created.
 
 ### Recursion
-The `floodReveal` function recursively reveals connected empty cells.
+The project contains two explicit recursive functions:
+- `floodReveal(...)` recursively reveals connected empty cells.
+- `countHiddenCells(...)` recursively counts all still hidden cells.
 
 ### Higher-Order Functions
 The project uses `map`, `filter`, `reduce`, and a small `pipe` helper.
@@ -97,14 +93,4 @@ The tests check:
 - flag toggling
 - reveal logic
 - win condition
-
-## Notes for grading
-
-This project is designed to clearly demonstrate:
-- functional core / imperative shell
-- pure domain logic
-- immutable state transitions
-- recursion
-- higher-order functions
-- structured project layout
-- working README and automated tests
+- recursive hidden-cell counting

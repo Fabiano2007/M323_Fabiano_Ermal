@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest"
 import { createBoard, countAdjacentMines, indexOf, setView } from "../src/domain/grid.js"
-import { reveal, toggleFlag } from "../src/domain/game.js"
+import { countHiddenCells, reveal, toggleFlag } from "../src/domain/game.js"
 import { mulberry32 } from "../src/domain/rng.js"
 import { GameState } from "../src/domain/types.js"
 
@@ -50,5 +50,13 @@ describe("game logic", () => {
 
     const next = reveal(state, { x: 0, y: 0 })
     expect(next.status).toBe("won")
+  })
+
+  test("recursive hidden-cell counter works", () => {
+    const boardA = createBoard(2, 2, 0, mulberry32(123))
+    expect(countHiddenCells(boardA)).toBe(4)
+
+    const boardB = setView(boardA, { x: 0, y: 0 }, { kind: "Revealed" })
+    expect(countHiddenCells(boardB)).toBe(3)
   })
 })
